@@ -1,0 +1,32 @@
+<div class="offres-rh-container">
+  <h2>Gestion des offres</h2>
+  <button class="btn-ajouter" (click)="ajouterOffre(user?.entreprise?.id)">Ajouter une offre</button>
+
+
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <ng-container *ngIf="offres$ | async as offres; else loading">
+    <div class="offres-list" *ngIf="offres.length > 0; else aucune">
+      <div *ngFor="let offre of offres" class="offre-card">
+        <div class="offre-header">
+          <span class="offre-libelle">{{ offre.libelle }}</span>
+          <div class="offre-actions">
+            <button (click)="modifierOffre(offre.id)" class="btn-edit">Modifier</button>
+            <button (click)="supprimerOffre(offre.id)" class="btn-delete">Supprimer</button>
+            <button (click)="voirCVs(offre.id)" class="btn-detail">Voir les CVs</button>
+          </div>
+        </div>
+        <div class="offre-details">
+          <span class="offre-metier">{{ offre.metier_propose }}</span>
+          <span class="offre-entreprise">{{ offre.entreprise?.nom || '—' }}</span>
+        </div>
+      </div>
+    </div>
+    <ng-template #aucune>
+      <div class="aucune-offre">Aucune offre.</div>
+    </ng-template>
+  </ng-container>
+  <ng-template #loading>
+    <div>Chargement…</div>
+  </ng-template>
+</div>

@@ -1,0 +1,42 @@
+<div *ngIf="loading">Chargement…</div>
+<div *ngIf="error">{{ error }}</div>
+
+<ng-container *ngIf="results$ | async as results">
+  <div *ngIf="results.length > 0" style="margin-bottom: 1.2rem;">
+    <button
+      class="send-btn"
+      (click)="sendTestConfirmation()"
+      [disabled]="selectedCVs.size === 0"
+    >
+      Envoyer un email de confirmation aux CVs sélectionnés
+    </button>
+  </div>
+  <div *ngIf="results.length > 0">
+    <div *ngFor="let r of results" class="cv-card">
+      <!-- CASE À COCHER (checkbox) à gauche du CV -->
+      <input
+  type="checkbox"
+  [checked]="selectedCVs.has(r.cv_id)"
+  (change)="toggleSelect(r.cv_id, $event)"
+  style="margin-right: 1.2rem; width: 1.2em; height: 1.2em; accent-color: #3793e0;"
+/>
+      <div class="cv-info">
+        <span class="cv-name">{{ r.nom }} {{ r.prenom }}</span>
+        <span class="cv-metier">{{ r.metier_propose }}</span>
+      </div>
+      <span
+        class="score-badge"
+        [ngClass]="{
+          'high': (r.score_metier_propose || 0) > 0.65,
+          'medium': (r.score_metier_propose || 0) > 0.35 && (r.score_metier_propose || 0) <= 0.65,
+          'low': (r.score_metier_propose || 0) <= 0.35
+        }"
+      >
+        {{ (r.score_metier_propose * 100) | number:'1.1-2' }} %
+      </span>
+    </div>
+  </div>
+  <div *ngIf="!loading && results.length === 0 && !error">
+    Aucun résultat.
+  </div>
+</ng-container>

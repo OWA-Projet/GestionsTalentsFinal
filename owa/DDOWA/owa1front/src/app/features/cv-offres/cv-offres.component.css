@@ -1,0 +1,133 @@
+.cvs-offre-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 22px 2vw 38px 2vw;
+  margin-top: 32px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 24px 0 rgba(0,0,0,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.02);
+}
+
+.cvs-offre-container h2 {
+  color: #4976f7;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 22px;
+  text-align: center;
+}
+
+/* BOUTONS */
+.btn-classify,
+.btn-classify-global {
+  display: inline-block;
+  margin: 0 10px 22px 0;
+  background: linear-gradient(90deg, #4976f7 60%, #9b5df6 100%);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 8px 28px;
+  cursor: pointer;
+  box-shadow: 0 1.5px 7px 0 rgba(80,90,180,0.11);
+  transition: background 0.15s, color 0.12s, box-shadow 0.15s;
+}
+.btn-classify:hover,
+.btn-classify-global:hover {
+  background: linear-gradient(90deg, #375fe6 40%, #7c41e8 100%);
+  color: #fffde3;
+  box-shadow: 0 4px 16px 0 rgba(120,120,200,0.14);
+}
+
+
+/* CARTE CV */
+.cv-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.cv-card {
+  background: #f8faff;
+  border-radius: 10px;
+  box-shadow: 0 1.5px 7px 0 rgba(120,122,244,0.05);
+  border: 1.2px solid #eaeaff;
+  padding: 18px 20px 12px 20px;
+  font-size: 1.05rem;
+  color: #3e466b;
+  transition: box-shadow 0.13s, border 0.13s;
+}
+.cv-card:hover {
+  border: 1.3px solid #4976f7;
+  box-shadow: 0 4px 20px 0 rgba(130,109,244,0.13);
+}
+.cv-card strong {
+  color: #4976f7;
+  font-weight: 700;
+}
+.cv-card .date {
+  margin-left: 12px;
+  font-size: 0.98rem;
+  color: #7b86aa;
+  font-style: italic;
+}
+
+/* LIEN TÉLÉCHARGER */
+.cv-card a {
+  display: inline-block;
+  margin-top: 6px;
+  color: #495ab6;
+  background: #f0f2fc;
+  border-radius: 5px;
+  padding: 5px 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.13s, color 0.13s;
+}
+.cv-card a:hover {
+  background: #e6eaff;
+  color: #1d3686;
+}
+
+.error {
+  color: #db2e2e;
+  text-align: center;
+  background: #fff2f2;
+  border-radius: 7px;
+  padding: 8px 0;
+  margin-bottom: 18px;
+  font-weight: 500;
+  font-size: 1.06rem;
+}
+.loading {
+  text-align: center;
+  color: #4976f7;
+  font-weight: 500;
+  font-size: 1.15rem;
+  margin: 22px 0;
+}
+.aucun {
+  text-align: center;
+  color: #7b86aa;
+  margin: 24px 0 0 0;
+  font-size: 1.09rem;
+}
+
+@media (max-width: 700px) {
+  .cvs-offre-container {
+    padding: 10px 2vw 18px 2vw;
+  }
+  .btn-classify,
+  .btn-classify-global {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 10px 0;
+    font-size: 1rem;
+  }
+  .cv-card {
+    padding: 14px 7px 10px 7px;
+    font-size: 1rem;
+  }
+}

@@ -1,0 +1,22 @@
+<div class="metiers-container">
+  <h2>Gestion des métiers</h2>
+  <button class="btn-ajouter" (click)="ajouterMetier()">Ajouter un métier</button>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <ng-container *ngIf="metiers$ | async as metiers; else loading">
+    <div class="metiers-list" *ngIf="metiers.length > 0; else aucune">
+      <div *ngFor="let metier of metiers" class="metier-card">
+        <div>
+          <strong>{{ metier.nom }}</strong>
+          
+        </div>
+       <div class="metier-actions">
+  <button (click)="modifierMetier(metier.id!)">Modifier</button>
+  <button (click)="supprimerMetier(metier.id!)">Supprimer</button>
+</div>
+
+      </div>
+    </div>
+    <ng-template #aucune><div>Aucun métier.</div></ng-template>
+  </ng-container>
+  <ng-template #loading><div>Chargement…</div></ng-template>
+</div>

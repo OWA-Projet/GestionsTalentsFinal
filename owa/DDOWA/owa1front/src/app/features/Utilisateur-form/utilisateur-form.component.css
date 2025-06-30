@@ -1,0 +1,123 @@
+.form-container {
+  max-width: 480px;
+  margin: 40px auto;
+  padding: 32px 28px 24px 28px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 24px 0 rgba(0,0,0,0.09), 0 1.5px 6px 0 rgba(0,0,0,0.02);
+}
+
+.form-container h2 {
+  margin-bottom: 18px;
+  font-size: 1.4rem;
+  color: #364167;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 3px;
+}
+
+label {
+  font-size: 0.97rem;
+  font-weight: 500;
+  color: #555d75;
+  margin-bottom: 3px;
+}
+
+input, select, textarea {
+  padding: 9px 12px;
+  border: 1.3px solid #d0d5e0;
+  border-radius: 7px;
+  font-size: 1rem;
+  outline: none;
+  background: #f9fafe;
+  transition: border-color 0.15s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #4976f7;
+  background: #fff;
+}
+
+textarea {
+  min-height: 44px;
+  resize: vertical;
+}
+
+input.invalid, select.invalid, textarea.invalid {
+  border-color: #fa5e5b;
+  background: #fff5f4;
+}
+
+.error {
+  color: #fa5e5b;
+  font-size: 0.93rem;
+  margin-top: 1px;
+  padding-left: 2px;
+  font-weight: 400;
+}
+
+.note {
+  font-size: 0.9rem;
+  color: #6974a1;
+  margin-top: 1px;
+  padding-left: 2px;
+}
+
+button[type="submit"] {
+  margin-top: 14px;
+  background: linear-gradient(90deg, #4976f7 40%, #9b5df6 100%);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.07rem;
+  font-weight: 600;
+  padding: 10px 0 9px 0;
+  cursor: pointer;
+  transition: background 0.14s, opacity 0.14s;
+  box-shadow: 0 2.5px 12px 0 rgba(130,109,244,0.08);
+  letter-spacing: 0.4px;
+}
+button[type="submit"]:hover:not(:disabled) {
+  background: linear-gradient(90deg, #375fe6 45%, #7c41e8 100%);
+  opacity: 0.96;
+}
+button[type="submit"]:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.loading {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 1.08rem;
+  color: #4976f7;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 600px) {
+  .form-container {
+    padding: 18px 6vw 14px 6vw;
+    max-width: 99vw;
+  }
+  form {
+    gap: 10px;
+  }
+}
+
+select[multiple] {
+  min-height: 44px;
+  padding: 7px 12px;
+  background: #f9fafe;
+}

@@ -1,0 +1,67 @@
+.postuler-container {
+  max-width: 540px;
+  margin: 2rem auto;
+  background: #f8f6ff;
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(90,70,160,0.11);
+  border: 1px solid #b39ddb;
+  color: #232144;
+}
+
+form label {
+  display: block;
+  font-weight: bold;
+  margin-top: 1.2rem;
+}
+
+form textarea,
+form input[type="text"] {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #b39ddb;
+  border-radius: 7px;
+  margin-top: 0.2rem;
+  font-size: 1rem;
+  resize: vertical;
+  background: #fff;
+}
+
+input[type="file"] {
+  margin-top: 0.5rem;
+}
+
+button[type="submit"] {
+  margin-top: 2rem;
+  background: #5e35b1;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 2.2rem;
+  font-size: 1.15rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 10px #e0e0e0;
+}
+button[type="submit"]:hover {
+  background: #4527a0;
+}
+
+.err {
+  color: #b71c1c;
+  font-size: 1rem;
+  margin-top: 0.2rem;
+  font-weight: bold;
+}
+
+.success {
+  color: #1b5e20;
+  background: #e6ffed;
+  border: 1px solid #2e7d32;
+  padding: 1rem 1.5rem;
+  margin: 2rem auto 0;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+}

@@ -1,0 +1,102 @@
+.about-container {
+  max-width: 800px;
+  margin: 40px auto 0 auto;
+  background: #fff;
+  padding: 36px 28px 28px 28px;
+  border-radius: 18px;
+  box-shadow: 0 6px 24px 0 rgba(0,0,0,0.09);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.about-hero {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.about-icon {
+  font-size: 3.6rem;
+  color: #ffca28;
+  margin-bottom: 10px;
+}
+
+.owa-highlight {
+  color: #4976f7;
+  font-weight: 700;
+}
+.owa-highlight .dot {
+  color: #ffca28;
+  font-weight: 900;
+}
+.about-lead {
+  color: #525366;
+  font-size: 1.2rem;
+  margin-top: 9px;
+  margin-bottom: 0;
+  font-weight: 400;
+}
+
+.about-section {
+  margin-bottom: 30px;
+}
+.about-section h2 {
+  color: #364167;
+  margin-bottom: 10px;
+  font-size: 1.14rem;
+}
+.about-section ul {
+  padding-left: 20px;
+  margin-bottom: 0;
+}
+.about-section li {
+  margin-bottom: 9px;
+  color: #464f6a;
+}
+
+.about-values {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  justify-content: start;
+  margin-top: 9px;
+}
+.about-values > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 500;
+  color: #555;
+  background: #f7f9ff;
+  border-radius: 9px;
+  padding: 8px 17px 8px 12px;
+  font-size: 1.03rem;
+}
+.about-values i {
+  font-size: 1.32em;
+  color: #4976f7;
+}
+
+.about-team {
+  background: #f6f6f6;
+  border-radius: 10px;
+  padding: 13px 16px 13px 18px;
+  margin-bottom: 16px;
+  color: #3d4565;
+}
+
+.about-contact a {
+  color: #4976f7;
+  text-decoration: underline;
+}
+.about-contact a:hover {
+  color: #ffca28;
+}
+
+@media (max-width: 600px) {
+  .about-container {
+    padding: 15px 2vw 10px 2vw;
+  }
+  .about-values {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

@@ -1,0 +1,430 @@
+model
+------
+class CV(models.Model):
+    id = models.AutoField(primary_key=True)
+    owner = models.ForeignKey(
+        Utilisateur,
+        related_name="cvs",
+        on_delete=models.CASCADE,
+        null=True,        # ← temporaire
+        blank=True        # ← temporaire
+    )
+
+    texte_brut = models.TextField(null=True,blank=True)
+    fichier = models.FileField(upload_to="cvs/", blank=True, null=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True, null=True)
+    # résultat brut de la classification (classe prédite)
+    is_classe = models.BooleanField(default=False)
+    formations = models.TextField(null=True,blank=True)
+    experiences = models.TextField(null=True,blank=True)
+    competences = models.TextField(null=True,blank=True)
+    langues = models.TextField(null=True,blank=True)
+    permis_conduite = models.TextField(null=True,blank=True)
+
+    metier =  models.ForeignKey(
+        Metier,
+        related_name="cvs",
+        on_delete=models.CASCADE,
+        null=True,        # ← temporaire
+        blank=True        # ← temporaire
+    )
+
+    offres = models.ManyToManyField(OffresEmploi, 
+                                    related_name='cvs', 
+                                    blank=True, null=True)
+
+
+
+
+serializer:
+----------
+from rest_framework import serializers
+from ..models import CV, Metier, OffresEmploi
+
+class MetierSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Metier
+        fields = ['id', 'nom', 'description']
+
+class CVSerializer(serializers.ModelSerializer):
+    owner = serializers.IntegerField(write_only=True)
+    owner_id = serializers.SerializerMethodField(read_only=True)
+    def get_owner_id(self, obj): return obj.owner_id
+
+    # Champ ForeignKey metier
+    metier = serializers.IntegerField(write_only=True, required=False, allow_null=True)
+    metier_id = serializers.SerializerMethodField(read_only=True)
+    def get_metier_id(self, obj): return obj.metier_id
+
+    # Lecture seule (optionnel) : détails complets du métier
+    metier_detail = MetierSerializer(source='metier', read_only=True)
+
+    offres = serializers.PrimaryKeyRelatedField(
+        queryset=OffresEmploi.objects.all(), many=True, required=False
+    )
+
+    class Meta:
+        model = CV
+        fields = [
+            "id",
+            "owner",
+            "owner_id",
+            "texte_brut",
+            "fichier",
+            "uploaded_at",
+            "is_classe",
+            "formations",
+            "experiences",
+            "competences",
+            "langues",
+            "permis_conduite",
+            "metier",
+            "metier_id",
+            "metier_detail",   # ← tu peux le retirer si tu veux seulement l'id
+            "offres",
+        ]
+        read_only_fields = [
+            "id",
+            "uploaded_at",
+            "is_classe",
+            "owner_id",
+            "metier_id",
+            "metier_detail",
+        ]
+
+
+
+
+
+service:
+--------
+import os
+from pathlib import Path
+import re, string
+from typing import Any, Dict
+from django.conf import settings
+from ..models import CV, Utilisateur
+import pdfplumber
+
+from django.utils import timezone
+
+# ML imports
+from joblib import load
+
+# Chargement du modèle ML (au premier appel, une seule fois)
+class CVService:
+    BASE_DIR = Path(__file__).resolve().parent
+    _bundle = None
+
+    @classmethod
+    def load_bundle(cls):
+        if cls._bundle is None:
+            cls._bundle = load(cls.BASE_DIR / "ml_models" / "cv_classifier_bundle_3.joblib")
+        return cls._bundle
+
+    @classmethod
+    def vectorizer(cls):
+        return cls.load_bundle()["vectorizer"]
+
+    @classmethod
+    def classifier(cls):
+        return cls.load_bundle()["model"]
+
+    @classmethod
+    def label_encoder(cls):
+        return cls.load_bundle()["label_encoder"]
+
+    @staticmethod
+    def nettoyer_texte(texte):
+        texte = texte.lower()
+        texte = re.sub(r"\d+", "", texte)
+        texte = texte.translate(str.maketrans("", "", string.punctuation))
+        return re.sub(r"\s+", " ", texte).strip()
+
+    @classmethod
+    def predict_one(cls, texte_brut):
+        txt_clean = cls.nettoyer_texte(texte_brut)
+        X = cls.vectorizer().transform([txt_clean])
+        proba = cls.classifier().predict_proba(X)[0]
+        classes = cls.classifier().classes_
+        labels = cls.label_encoder().inverse_transform(classes)
+        pairs = sorted(zip(labels, proba), key=lambda t: t[1], reverse=True)
+        return [{"label": l, "probability": float(round(p, 4))} for l, p in pairs]
+
+    @classmethod
+    def predict_batch(cls, queryset):
+        results = []
+        for obj in queryset:
+            preds = cls.predict_one(obj.texte_brut)
+            results.append({"id": obj.id, "result": preds})
+        return results
+
+    @staticmethod
+    def extract_text_pdf(pdf_file):
+        pdf_file.seek(0)
+        with pdfplumber.open(pdf_file) as pdf:
+            return "\n\n".join((p.extract_text() or "") for p in pdf.pages)
+
+    """Opérations CRUD encapsulées pour la logique métier."""
+
+    @staticmethod
+    # extrait de CVService.list_for_user
+    @staticmethod
+    def list_for_user(user: Utilisateur):
+        is_rh = user.roles.filter(name="RH").exists()
+        return CV.objects.all() if is_rh else CV.objects.filter(owner=user)
+    
+    @staticmethod
+    def list_for_user(user: Utilisateur):
+        if user.roles.filter(name="RH").exists() and user.entreprise is not None:
+            return CV.objects.filter(offres__entreprise=user.entreprise).distinct()
+        else:
+            return CV.objects.filter(owner=user)
+
+
+
+    @staticmethod
+    def create(owner: Utilisateur, validated_data: Dict[str, Any]) -> CV:
+        # On retire les offres du validated_data si présent
+        offres = validated_data.pop('offres', None)
+        cv = CV.objects.create(owner=owner, **validated_data)
+        # On les ajoute ensuite, car ManyToMany nécessite un objet déjà sauvegardé
+        if offres is not None:
+            cv.offres.set(offres)
+        return cv
+
+    @staticmethod
+    def update(cv: CV, validated_data: Dict[str, Any]) -> CV:
+        offres = validated_data.pop('offres', None)
+        for attr, value in validated_data.items():
+            setattr(cv, attr, value)
+        cv.save()
+        if offres is not None:
+            cv.offres.set(offres)
+        return cv
+
+
+    @staticmethod
+    def delete(cv: CV):
+        cv.delete()
+
+    @staticmethod
+    def get_all_CVs():
+        return CV.objects.all()
+
+
+
+
+View:
+------
+from rest_framework import viewsets, permissions, status
+from rest_framework.response import Response
+from rest_framework.decorators import action
+
+from ..models import CV, CV_classe
+from ..services.permissions import HasUserRole
+from ..serializers.CvSerializer import CVSerializer
+from ..services.CVService import CVService
+
+class CVviewSetForCandidat(viewsets.ModelViewSet):
+
+    serializer_class = CVSerializer
+    permission_classes = [permissions.IsAuthenticated, HasUserRole.with_roles('CANDIDAT')]
+
+    def get_queryset(self):
+        # Un candidat ne voit QUE ses propres CVs
+        return CV.objects.filter(owner=self.request.user)
+
+    def perform_create(self, serializer):
+        # L'owner est toujours l'utilisateur connecté
+        serializer.save(owner=self.request.user)
+
+    def perform_update(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    @action(detail=True, methods=["post"], url_path="classify")
+    def classify(self, request, pk=None):
+        """
+        POST /cvs/{id}/classify/
+        Renvoie la liste des (label, probability) et enregistre le résultat.
+        """
+        cv = self.get_object()
+        predictions = CVService.predict_one(cv.texte_brut)
+        CV_classe.objects.create(cv=cv, metiers=predictions)
+        return Response(predictions, status=status.HTTP_200_OK)
+
+
+
+
+CvServise:
+----------
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+
+@Injectable({ providedIn: 'root' })
+export class CvService {
+  private api = 'http://127.0.0.1:8000/api/cvs/';
+  private apiCandidat = 'http://localhost:8000/api/cvs_candidat/';
+
+  constructor(private http: HttpClient) {}
+
+  getAll() { return this.http.get<any[]>(this.api); }
+  create(fd: FormData) { return this.http.post(this.api, fd); }
+  createCVcandidat(fd: FormData) { return this.http.post(this.apiCandidat, fd); }
+  delete(id: number) { return this.http.delete(`${this.api}${id}/`); }
+  classify(id: number) { return this.http.post<any>(`${this.api}${id}/classify/`, {}); }
+  getOne(id: number) { return this.http.get<any>(`${this.api}${id}/`); }
+  
+}
+
+
+
+
+component:
+----------
+import { Component, Input } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CvService } from '../../core/cv.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-postuler',
+  templateUrl: './postuler.html',
+  styleUrls: ['./postuler.css'],
+  standalone: true,
+    imports: [CommonModule, ReactiveFormsModule],
+})
+export class PostulerComponent {
+  postulerForm: FormGroup;
+  fichier: File | null = null;
+  success: boolean | null = null;
+  loading = false;
+  error: string | null = null;
+  offreId: number;
+
+  constructor(
+    private fb: FormBuilder,
+    private cvService: CvService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    this.postulerForm = this.fb.group({
+      formations: [''],
+      experiences: [''],
+      competences: [''],
+      langues: [''],
+      permis_conduite: [''],
+      fichier: [null, Validators.required]
+    });
+
+    // Récupère l'id de l'offre depuis la route (ou via @Input)
+    this.offreId = Number(this.route.snapshot.paramMap.get('offreId')) || 0;
+  }
+
+  onFileChange(event: any) {
+    if (event.target.files.length > 0) {
+      this.fichier = event.target.files[0];
+      this.postulerForm.patchValue({ fichier: this.fichier });
+    }
+  }
+
+  onSubmit() {
+    if (this.postulerForm.invalid || !this.fichier) return;
+    this.loading = true;
+    const fd = new FormData();
+
+    // Ajoute les champs du formulaire
+    Object.entries(this.postulerForm.value).forEach(([key, value]) => {
+  if (key !== 'fichier') {
+    fd.append(key, value == null ? '' : (typeof value === 'object' ? JSON.stringify(value) : String(value)));
+  }
+});
+
+
+    // Ajoute le fichier
+    fd.append('fichier', this.fichier);
+
+    // Ajoute l’id de l’offre à la ManyToMany offres (champ "offres")
+    fd.append('offres', String(this.offreId));
+
+    // Ajoute l'id du user courant (backend exige owner, donc adapter ici selon ton contexte d'auth)
+    const userString = localStorage.getItem('user');
+    const userObj = userString ? JSON.parse(userString) : null;
+    if (!userObj?.id) {
+      this.error = "Utilisateur non connecté ou id manquant";
+      this.loading = false;
+    return;
+    }
+    fd.append('owner',userObj.id);
+
+
+    this.cvService.createCVcandidat(fd).subscribe({
+      next: () => {
+        this.success = true;
+        this.loading = false;
+        this.postulerForm.reset();
+        setTimeout(() => this.router.navigate(['/']), 2000);
+      },
+      error: err => {
+        this.error = "Échec de la candidature";
+        this.loading = false;
+      }
+    });
+  }
+}
+
+
+
+
+html:
+-----
+<div class="postuler-container">
+  <h2>Déposer votre candidature</h2>
+  <form [formGroup]="postulerForm" (ngSubmit)="onSubmit()" novalidate>
+    <label>Formations*</label>
+    <textarea formControlName="formations"></textarea>
+    <div *ngIf="postulerForm.get('formations')?.invalid && postulerForm.get('formations')?.touched" class="err">Obligatoire</div>
+
+    <label>Expériences*</label>
+    <textarea formControlName="experiences"></textarea>
+    <div *ngIf="postulerForm.get('experiences')?.invalid && postulerForm.get('experiences')?.touched" class="err">Obligatoire</div>
+
+    <label>Compétences*</label>
+    <textarea formControlName="competences"></textarea>
+    <div *ngIf="postulerForm.get('competences')?.invalid && postulerForm.get('competences')?.touched" class="err">Obligatoire</div>
+
+    <label>Langues</label>
+    <input formControlName="langues" type="text">
+
+    <label>Permis de conduire</label>
+    <input formControlName="permis_conduite" type="text">
+
+    <label>Votre CV (PDF)*</label>
+    <input type="file" (change)="onFileChange($event)" accept="application/pdf" required>
+    <div *ngIf="postulerForm.get('fichier')?.invalid && postulerForm.get('fichier')?.touched" class="err">CV obligatoire</div>
+
+    <button type="submit" [disabled]="postulerForm.invalid || loading">Envoyer</button>
+  </form>
+
+  <div *ngIf="loading">Envoi en cours...</div>
+  <div *ngIf="success" class="success">Candidature envoyée avec succès !</div>
+  <div *ngIf="error" class="err">{{ error }}</div>
+</div>
+
+
+
+
+veuillez corriger tout !!!
+
+
+
+
+
+
+
+
+
+
+
+

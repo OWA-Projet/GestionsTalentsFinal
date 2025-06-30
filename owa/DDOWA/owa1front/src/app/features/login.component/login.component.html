@@ -1,0 +1,27 @@
+<div class="login-container">
+  <h2>Connexion</h2>
+
+  <div *ngIf="alertMsg"
+       [ngClass]="{'alert-success': alertType === 'success', 'alert-error': alertType === 'error'}"
+       class="alert">
+    {{ alertMsg }}
+  </div>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+    <label>Nom d'utilisateur</label>
+    <input type="text" formControlName="username" autocomplete="username" />
+    <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="error">
+      Ce champ est obligatoire.
+    </div>
+
+    <label>Mot de passe</label>
+    <input type="password" formControlName="password" autocomplete="current-password" />
+    <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
+      Ce champ est obligatoire.
+    </div>
+
+    <button type="submit" [disabled]="loginForm.invalid || loading">
+      {{ loading ? 'Connexion...' : 'Se connecter' }}
+    </button>
+  </form>
+</div>

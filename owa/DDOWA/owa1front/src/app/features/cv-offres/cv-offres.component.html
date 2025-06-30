@@ -1,0 +1,39 @@
+<div class="cvs-offre-container">
+  <h2>CVs reçus pour cette offre</h2>
+
+  <ng-container *ngIf="cvs$ | async as state">
+    <!-- BOUTON indépendant ! -->
+    <button
+      class="btn-classify"
+      
+      (click)="classifyAll()"
+    >
+    
+      Classifier tous les CVs
+    </button>
+    <button class="btn-classify-global" (click)="goToCvClasses()">
+      Voir CVs classés
+    </button>
+    <div *ngIf="state.loading" class="loading">Chargement…</div>
+    <div *ngIf="state.error" class="error">{{ state.error }}</div>
+    <div *ngIf="!state.loading && state.cvs.length === 0 && !state.error" class="aucun">
+      Aucun CV pour cette offre.
+    </div>
+    <div class="cv-list" *ngIf="state.cvs.length > 0">
+      <div *ngFor="let cv of state.cvs" class="cv-card">
+        <div>
+          <strong>Candidat :</strong>
+          {{ cv.owner.nom || 'Inconnu' }} {{ cv.owner.prenom || '' }}
+          <span class="date">Posté le {{ cv.uploaded_at | date:'short' }}</span>
+        </div>
+        <div><strong>Formations :</strong> {{ cv.formations }}</div>
+        <div><strong>Expériences :</strong> {{ cv.experiences }}</div>
+        <div><strong>Compétences :</strong> {{ cv.competences }}</div>
+        <div *ngIf="cv.langues"><strong>Langues :</strong> {{ cv.langues }}</div>
+        <div *ngIf="cv.fichier">
+          <a [href]="getCvUrl(cv.fichier)" download="{{cv.fichier}}.pdf">Télécharger le CV</a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

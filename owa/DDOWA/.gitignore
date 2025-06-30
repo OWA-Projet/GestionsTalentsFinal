@@ -1,0 +1,27 @@
+# 🛡️ Fichiers lourds ou inutiles à versionner
+node_modules/
+dist/
+build/
+.env
+*.log
+
+# 🧪 Environnements Python (si tu en as dans ton projet)
+__pycache__/
+*.py[cod]
+*.pyd
+venv/
+
+# ⚙️ Système / IDE
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Fichiers potentiellement bloquants
+*.dll
+*.exe
+*.zip
+*.7z
+*.mp4
+*.avi

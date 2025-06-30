@@ -1,0 +1,59 @@
+<div class="form-container">
+  <h2>{{ isEdit ? 'Modifier un utilisateur' : 'Ajouter un utilisateur' }}</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Nom d'utilisateur</label>
+      <input formControlName="username" placeholder="Nom d'utilisateur"
+             [class.invalid]="form.get('username')?.invalid && form.get('username')?.touched"/>
+      <div class="error" *ngIf="form.get('username')?.invalid && form.get('username')?.touched">Ce champ est requis.</div>
+    </div>
+    <div class="form-group">
+      <label>Mot de passe</label>
+      <input type="password" formControlName="password" placeholder="Mot de passe"
+             [class.invalid]="form.get('password')?.invalid && form.get('password')?.touched"/>
+      <div class="error" *ngIf="form.get('password')?.invalid && form.get('password')?.touched && !isEdit">
+        Ce champ est requis.
+      </div>
+      <div *ngIf="isEdit" class="note">Laisse vide pour ne pas changer le mot de passe.</div>
+    </div>
+    <div class="form-group">
+      <label>Nom</label>
+      <input formControlName="nom" placeholder="Nom"
+             [class.invalid]="form.get('nom')?.invalid && form.get('nom')?.touched"/>
+      <div class="error" *ngIf="form.get('nom')?.invalid && form.get('nom')?.touched">Ce champ est requis.</div>
+    </div>
+    <div class="form-group">
+      <label>Prénom</label>
+      <input formControlName="prenom" placeholder="Prénom"
+             [class.invalid]="form.get('prenom')?.invalid && form.get('prenom')?.touched"/>
+      <div class="error" *ngIf="form.get('prenom')?.invalid && form.get('prenom')?.touched">Ce champ est requis.</div>
+    </div>
+    <div class="form-group">
+      <label>Poste</label>
+      <input formControlName="poste" placeholder="Poste"
+             [class.invalid]="form.get('poste')?.invalid && form.get('poste')?.touched"/>
+      <div class="error" *ngIf="form.get('poste')?.invalid && form.get('poste')?.touched">Ce champ est requis.</div>
+    </div>
+    <div class="form-group">
+      <label>Rôles</label>
+      <select formControlName="roles" multiple>
+        <option value="CANDIDAT">CANDIDAT</option>
+        <option value="RH">RH</option>
+        <option value="ADMIN">ADMIN</option>
+        <!-- Ajoute tous tes rôles ici -->
+      </select>
+    </div>
+    <div class="form-group" *ngIf="isRHSelected()">
+  <label>Entreprise</label>
+  <select formControlName="entreprise">
+    <option [ngValue]="null">-- Aucun --</option>
+    <option *ngFor="let ent of entreprises" [ngValue]="ent.id">{{ ent.nom }}</option>
+  </select>
+</div>
+    <button type="submit" [disabled]="form.invalid || (loading$ | async)">
+      {{ isEdit ? 'Enregistrer' : 'Créer' }}
+    </button>
+  </form>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <div *ngIf="loading$ | async" class="loading">Chargement...</div>
+</div>

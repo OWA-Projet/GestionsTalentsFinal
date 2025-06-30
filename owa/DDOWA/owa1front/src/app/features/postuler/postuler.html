@@ -1,0 +1,34 @@
+<div class="postuler-container">
+  <h2>Déposer votre candidature</h2>
+
+  <form [formGroup]="postulerForm" (ngSubmit)="onSubmit()" novalidate>
+    <label>Formations*</label>
+    <textarea formControlName="formations"></textarea>
+    <div *ngIf="postulerForm.get('formations')?.invalid && postulerForm.get('formations')?.touched" class="err">Obligatoire</div>
+
+    <label>Expériences*</label>
+    <textarea formControlName="experiences"></textarea>
+    <div *ngIf="postulerForm.get('experiences')?.invalid && postulerForm.get('experiences')?.touched" class="err">Obligatoire</div>
+
+    <label>Compétences*</label>
+    <textarea formControlName="competences"></textarea>
+    <div *ngIf="postulerForm.get('competences')?.invalid && postulerForm.get('competences')?.touched" class="err">Obligatoire</div>
+
+    <label>Langues</label>
+    <input formControlName="langues" type="text">
+
+    <label>Permis de conduire</label>
+    <input formControlName="permis_conduite" type="text">
+
+    <label>Votre CV (PDF)*</label>
+    <input type="file" (change)="onFileChange($event)" accept="application/pdf" required>
+    <div *ngIf="postulerForm.get('fichier')?.invalid && postulerForm.get('fichier')?.touched" class="err">CV obligatoire</div>
+
+    <button type="submit" [disabled]="postulerForm.invalid || loading">
+      {{ loading ? 'Envoi en cours...' : 'Envoyer' }}
+    </button>
+  </form>
+
+  <div *ngIf="success" class="success">Candidature envoyée avec succès !</div>
+  <div *ngIf="error" class="err">{{ error }}</div>
+</div>

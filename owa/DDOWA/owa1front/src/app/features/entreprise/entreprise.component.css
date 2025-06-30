@@ -1,0 +1,162 @@
+.entreprises-container {
+    max-width: 700px;
+    margin: 3em auto 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 28px 0 #23324614;
+    padding: 2.5em 2em 2em 2em;
+  }
+  
+  h2 {
+    font-size: 2em;
+    color: #222;
+    font-weight: 700;
+    margin-bottom: 1.5em;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  
+  .btn-ajouter {
+    display: inline-block;
+    background: linear-gradient(90deg, #1366d6, #0053a6);
+    color: #fff;
+    font-weight: 600;
+    padding: 0.7em 2em;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 1.7em;
+    font-size: 1.06em;
+    box-shadow: 0 2px 10px #1a46d622;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.08s;
+  }
+  .btn-ajouter:hover, .btn-ajouter:focus {
+    background: linear-gradient(90deg, #0053a6 40%, #1366d6 100%);
+    box-shadow: 0 4px 18px #1366d655;
+    transform: translateY(-2px) scale(1.03);
+  }
+  
+  .entreprises-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    margin-bottom: 2em;
+  }
+  
+  .entreprise-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8faff;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px #23324611;
+    padding: 1.4em 1.5em;
+    transition: box-shadow 0.18s, background 0.17s;
+    border: 1px solid #e4eaf7;
+  }
+  .entreprise-card:hover {
+    background: #f1f7ff;
+    box-shadow: 0 6px 24px #1366d62b;
+    border-color: #b8d5fa;
+  }
+  
+  .entreprise-card strong {
+    font-size: 1.14em;
+    color: #14335a;
+    margin-right: 0.7em;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+  }
+  
+  .entreprise-card span {
+    color: #64748b;
+    font-size: 1em;
+    font-weight: 400;
+  }
+  
+  .entreprise-card button {
+    margin-left: 0.5em;
+    font-size: 1em;
+    padding: 0.4em 1.2em;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.18s, color 0.13s, box-shadow 0.15s;
+  }
+  
+  .entreprise-card button:first-child {
+    background: #e3f2fd;
+    color: #1366d6;
+    border: 1px solid #bee3f8;
+  }
+  .entreprise-card button:first-child:hover {
+    background: #cfe5fc;
+    color: #0053a6;
+    box-shadow: 0 2px 8px #1366d624;
+  }
+  
+  .entreprise-card button:last-child {
+    background: #ffeaea;
+    color: #cb2431;
+    border: 1px solid #fdcaca;
+  }
+  .entreprise-card button:last-child:hover {
+    background: #ffd6d6;
+    color: #a41b22;
+    box-shadow: 0 2px 8px #fbb6b6a0;
+  }
+  
+  .error {
+    color: #cb2431;
+    background: #fff3f4;
+    padding: 0.8em 1em;
+    border-radius: 7px;
+    font-weight: 500;
+    margin-bottom: 1.5em;
+    text-align: center;
+    border: 1px solid #ffdada;
+    box-shadow: 0 2px 8px #ffeded4a;
+  }
+  
+  .aucune-offre, .aucune-entreprise {
+    color: #818ba1;
+    background: #f5f7fa;
+    border-radius: 10px;
+    padding: 1.2em 1em;
+    text-align: center;
+    font-size: 1.1em;
+    font-style: italic;
+    border: 1px solid #e0e7ef;
+    margin-top: 1.4em;
+  }
+  
+  .loading {
+    text-align: center;
+    padding: 1.3em 0 1em 0;
+    color: #0070f3;
+    font-size: 1.1em;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  
+  /* Responsive */
+  @media (max-width: 700px) {
+    .entreprises-container {
+      padding: 1.3em 0.6em 1.5em 0.6em;
+      max-width: 99vw;
+    }
+    .entreprise-card {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1em;
+      padding: 1em 0.7em;
+    }
+    .entreprise-card button {
+      width: 100%;
+      margin-left: 0;
+      margin-top: 0.5em;
+    }
+  }
+  

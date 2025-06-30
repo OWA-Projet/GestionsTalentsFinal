@@ -1,0 +1,58 @@
+-------------------------
+| Use Cases liés à l'IA |
+-------------------------
+
+
+Use Case 1 : Matching intelligent des candidats
+--------
+
+	* Acteurs : Responsables RH, Candidats.
+
+	* Description : Utiliser des algorithmes d'IA pour analyser les CV et les 	profils des candidats, puis les matcher avec les offres d'emploi en 	fonction des compétences, expériences et besoins des entreprises.
+
+	* Objectif : Réduire le temps de recrutement et améliorer la qualité des 	recrutements.
+
+
+Use Case 2 : Cartographie dynamique des compétences
+---------
+
+	* Acteurs : Responsables RH, Managers.
+
+	* Description : Analyser les compétences des employés via l'IA pour identifier les forces et les lacunes au sein des équipes.
+
+	* Objectif : Aider les entreprises à planifier des formations et à optimiser la gestion des talents.
+
+
+Use Case 3 : Recommandations de formations personnalisées
+---------
+
+	* Acteurs : Employés, Manager.
+
+	* Description : Utiliser l'IA pour analyser les besoins en compétences 	des employés et recommander des formations adaptées.
+
+	* Objectif : Améliorer le développement des compétences et la 	productivité des équipes.
+
+
+
+
+-------------------------
+| Description détaillée |
+-------------------------
+
+Objectifs AI:
+------------
+
+Formule standard : 
+	- Classification CV selon métier.
+
+Formule Premium : 
+	- analyse pour recommandation des formations :
+
+			1= génération des testes/entretiens pour les candidats en 			fonction du métier (besoins) prédit "Via API".
+
+			2= Evaluation du teste/entretient "via API" .
+
+			3= Détermination nombre de postes disponibles concernant 			(stage/emploie) et choisir en fonction de ce nombre le 				nombre des candidats admit .
+
+			4= analyser les reponses de ces candidats pour 					identifier les faiblesses et les forces . 
+

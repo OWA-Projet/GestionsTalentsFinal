@@ -1,0 +1,43 @@
+<div class="contact-container">
+  <h2>Contactez-nous</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Nom</label>
+      <input formControlName="nom" placeholder="Votre nom"
+             [class.invalid]="form.get('nom')?.invalid && form.get('nom')?.touched"/>
+      <div class="error" *ngIf="form.get('nom')?.invalid && form.get('nom')?.touched">
+        Ce champ est requis.
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input formControlName="email" placeholder="Votre email"
+             [class.invalid]="form.get('email')?.invalid && form.get('email')?.touched"/>
+      <div class="error" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+        Saisis un email valide.
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Sujet</label>
+      <input formControlName="sujet" placeholder="Sujet"
+             [class.invalid]="form.get('sujet')?.invalid && form.get('sujet')?.touched"/>
+      <div class="error" *ngIf="form.get('sujet')?.invalid && form.get('sujet')?.touched">
+        Ce champ est requis.
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Message</label>
+      <textarea formControlName="message" rows="5" placeholder="Votre message"
+                [class.invalid]="form.get('message')?.invalid && form.get('message')?.touched"></textarea>
+      <div class="error" *ngIf="form.get('message')?.invalid && form.get('message')?.touched">
+        Ton message doit faire au moins 10 caractères.
+      </div>
+    </div>
+    <button type="submit" [disabled]="form.invalid || isLoading">
+      Envoyer
+    </button>
+  </form>
+  <div *ngIf="successMsg" class="alert-success">{{ successMsg }}</div>
+  <div *ngIf="errorMsg" class="alert-error">{{ errorMsg }}</div>
+  <div *ngIf="isLoading" class="loading">Envoi en cours…</div>
+</div>

@@ -1,0 +1,15 @@
+<div class="profil-container" *ngIf="user$ | async as user; else loading">
+  <h2>Mon profil</h2>
+  <div class="profil-info">
+    <p><strong>Nom d'utilisateur :</strong> {{ user.username }}</p>
+    <p><strong>Nom :</strong> {{ user.nom }}</p>
+    <p><strong>Prénom :</strong> {{ user.prenom }}</p>
+    <p><strong>Poste :</strong> {{ user.poste }}</p>
+    <p><strong>Rôles :</strong> {{ user.roles.join(', ') }}</p>
+    <p *ngIf="isRH()"><strong>Entreprise :</strong> {{ user.entreprise?.nom || 'Aucune' }}</p>
+    
+  </div>
+</div>
+<ng-template #loading>
+  <div class="loading">Chargement du profil...</div>
+</ng-template>

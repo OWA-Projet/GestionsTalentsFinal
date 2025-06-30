@@ -1,0 +1,20 @@
+<div *ngIf="loading$ | async">Chargement...</div>
+
+<!-- Affiche l’erreur SEULE si présente -->
+<div *ngIf="!(loading$ | async) && (error$ | async) as errorMsg; else contenu">
+  {{ errorMsg }}
+</div>
+
+<!-- Sinon le contenu -->
+<ng-template #contenu>
+  <div *ngIf="(offresSelectionnees$ | async)?.length === 0" class="aucun-test-message">
+  Aucun test à passer pour l’instant.
+</div>
+
+  <div *ngFor="let offre of (offresSelectionnees$ | async)" class="offre-card">
+    <div>
+      <span class="offre-titre">{{ offre.offre.libelle }}</span>
+    </div>
+   <button (click)="passerTest(offre.offre.id, offre.cv_offre_id)">Passer le test</button>
+  </div>
+</ng-template>

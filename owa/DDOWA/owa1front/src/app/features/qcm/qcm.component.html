@@ -1,0 +1,42 @@
+<form *ngIf="!(loading$ | async) && !(error$ | async)">
+    <ng-container *ngIf="questions$ | async as questions">
+      <div *ngIf="questions.length === 0">Aucune question disponible.</div>
+      <div *ngFor="let q of questions" class="qcm-question">
+        <div class="qcm-q"><b>{{ q.question }}</b></div>
+        <div>
+          <label *ngFor="let c of q.choices" class="qcm-choice">
+            <input
+              type="radio"
+              [name]="'q' + q.id"
+              [value]="c"
+              [checked]="userAnswers[q.id] === c"
+              [disabled]="submitted"
+              (change)="selectAnswer(q.id, c)"
+            />
+            {{ c }}
+          </label>
+        </div>
+        <div *ngIf="submitted" class="qcm-feedback">
+          <span *ngIf="userAnswers[q.id] === q.answer" class="good">✔ Bonne réponse !</span>
+          <span *ngIf="userAnswers[q.id] && userAnswers[q.id] !== q.answer" class="bad">
+            ✖ Mauvaise réponse (bonne : <b>{{ q.answer }}</b>)
+          </span>
+          <span *ngIf="!userAnswers[q.id]" class="bad">Non répondu</span>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: center;">
+        <button
+          type="button"
+          class="qcm-submit-btn"
+          [disabled]="submitted || answeredCount < questions.length"
+          (click)="submit(questions)"
+        >
+          Soumettre
+        </button>
+      </div>
+      <div *ngIf="submitted" class="qcm-score">
+        Score : <b>{{ score }}/{{ questions.length }}</b>
+      </div>
+    </ng-container>
+  </form>
+  

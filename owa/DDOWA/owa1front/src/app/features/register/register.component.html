@@ -1,0 +1,54 @@
+<div class="register-container">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+    <h2>Créer un compte</h2>
+
+    <div>
+      <label for="username">Nom d'utilisateur</label>
+      <input id="username" type="text" formControlName="username" />
+      <div class="error" *ngIf="f.username.touched && f.username.invalid">
+        Minimum 4 caractères.
+      </div>
+    </div>
+
+    <div>
+      <label for="password">Mot de passe</label>
+      <input id="password" type="password" formControlName="password" />
+      <div class="error" *ngIf="f.password.touched && f.password.invalid">
+        Minimum 6 caractères.
+      </div>
+    </div>
+
+    <div>
+      <label for="nom">Nom</label>
+      <input id="nom" type="text" formControlName="nom" />
+      <div class="error" *ngIf="f.nom.touched && f.nom.invalid">
+        Ce champ est requis.
+      </div>
+    </div>
+
+    <div>
+      <label for="prenom">Prénom</label>
+      <input id="prenom" type="text" formControlName="prenom" />
+      <div class="error" *ngIf="f.prenom.touched && f.prenom.invalid">
+        Ce champ est requis.
+      </div>
+    </div>
+
+    <div>
+      <label for="poste">Poste</label>
+      <input id="poste" type="text" formControlName="poste" />
+      <div class="error" *ngIf="f.poste.touched && f.poste.invalid">
+        Ce champ est requis.
+      </div>
+    </div>
+
+    <!-- Pas de champ 'roles' visible -->
+
+    <button type="submit" [disabled]="loading || registerForm.invalid">
+      {{ loading ? 'Enregistrement...' : 'Créer le compte' }}
+    </button>
+
+    <div class="success" *ngIf="success">{{ success }}</div>
+    <div class="error" *ngIf="error">{{ error }}</div>
+  </form>
+</div>

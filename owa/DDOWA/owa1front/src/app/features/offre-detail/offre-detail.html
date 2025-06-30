@@ -1,0 +1,35 @@
+<div class="detail-container">
+  <div *ngIf="alertMsg" [ngClass]="{'alert-error': alertType === 'error', 'alert-success': alertType === 'success'}" class="alert">
+    {{ alertMsg }}
+  </div>
+  <div *ngIf="isLoading" class="loading">Chargement…</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <ng-container *ngIf="offre$ | async as offre">
+    <ng-container *ngIf="offre && !isLoading">
+      <h1>{{ offre.libelle }}</h1>
+      <div class="entreprise-section">
+        <span *ngIf="offre?.entreprise?.image">
+          <img [src]="getLogoUrl(offre?.entreprise?.image)"
+     alt="Logo entreprise"
+     class="logo-img"
+    >
+        </span>
+        <div>
+          <strong>Entreprise :</strong> {{ offre?.entreprise?.nom || '—' }}<br>
+          <em *ngIf="offre?.entreprise?.adresse_siege">Adresse : {{ offre?.entreprise?.adresse_siege }}</em>
+        </div>
+      </div>
+      <p *ngIf="offre?.metier_propose"><strong>Métier proposé :</strong> {{ offre?.metier_propose }}</p>
+      <p *ngIf="offre?.description"><strong>Description :</strong> {{ offre?.description }}</p>
+      <p *ngIf="offre?.secteur_activite"><strong>Secteur d'activité :</strong> {{ offre?.secteur_activite }}</p>
+      <p *ngIf="offre?.Experience_requise"><strong>Expérience requise :</strong> {{ offre?.Experience_requise }}</p>
+      <p *ngIf="offre?.niveau_etude"><strong>Niveau d'étude :</strong> {{ offre?.niveau_etude }}</p>
+      <p *ngIf="offre?.type_contrat"><strong>Type de contrat :</strong> {{ offre?.type_contrat }}</p>
+      <p *ngIf="offre?.date_publication"><strong>Date publication :</strong> {{ offre?.date_publication | date:'medium' }}</p>
+      <p *ngIf="offre?.date_expiration"><strong>Date expiration :</strong> {{ offre?.date_expiration | date:'medium' }}</p>
+      <p><strong>Profil recherché :</strong> {{ offre?.profil_recherche || '—' }}</p>
+      <button class="btn-postuler" (click)="onPostuler(offre.id)">Postuler</button>
+    </ng-container>
+  </ng-container>
+</div>

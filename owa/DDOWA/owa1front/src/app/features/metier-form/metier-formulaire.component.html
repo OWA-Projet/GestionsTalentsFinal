@@ -1,0 +1,22 @@
+<div class="form-container">
+  <h2>{{ isEdit ? 'Modifier un métier' : 'Ajouter un métier' }}</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Nom</label>
+      <input formControlName="nom" placeholder="Nom du métier"
+             [class.invalid]="form.get('nom')?.invalid && form.get('nom')?.touched"/>
+      <div class="error" *ngIf="form.get('nom')?.invalid && form.get('nom')?.touched">Ce champ est requis.</div>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea formControlName="description" placeholder="Description"
+                [class.invalid]="form.get('description')?.invalid && form.get('description')?.touched"></textarea>
+      <div class="error" *ngIf="form.get('description')?.invalid && form.get('description')?.touched">Ce champ est requis.</div>
+    </div>
+    <button type="submit" [disabled]="form.invalid || (loading$ | async)">
+      {{ isEdit ? 'Enregistrer' : 'Créer' }}
+    </button>
+  </form>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <div *ngIf="loading$ | async" class="loading">Chargement...</div>
+</div>

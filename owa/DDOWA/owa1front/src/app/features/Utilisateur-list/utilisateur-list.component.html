@@ -1,0 +1,23 @@
+<div class="entreprises-container">
+  <h2>Gestion des utilisateurs</h2>
+  <button class="btn-ajouter" (click)="ajouterUser()">Ajouter un utilisateur</button>
+  <div *ngIf="error" class="error">{{ error }}</div>
+  <ng-container *ngIf="users$ | async as users; else loading">
+    <div class="entreprises-list" *ngIf="users.length > 0; else aucune">
+      <div *ngFor="let user of users" class="entreprise-card">
+        <div>
+          <strong>{{ user.nom }} {{ user.prenom }}</strong>
+          <span>&#64;{{ user.username }}</span>
+          <span *ngIf="user.entreprise">— {{ user.entreprise.nom }}</span>
+        </div>
+        <div>
+          <button (click)="modifierUser(user.id)">Modifier</button>
+          <button (click)="supprimerUser(user.id)">Supprimer</button>
+        </div>
+      </div>
+    </div>
+    <ng-template #aucune><div>Aucun utilisateur.</div></ng-template>
+  </ng-container>
+  <ng-template #loading><div>Chargement…</div></ng-template>
+</div>
+

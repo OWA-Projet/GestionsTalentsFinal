@@ -1,0 +1,80 @@
+<!-- NAVBAR START -->
+<nav class="navbar">
+  <div class="navbar-brand">
+    <a routerLink="/" class="logo-title">
+      <i class="fa fa-user-tie" style="color:#ffca28;margin-right:6px;"></i>
+      <span style="color:#fff;">OWA</span><span class="dot">.</span><span class="recrute">Recrute</span>
+    </a>
+  </div>
+  <div class="navbar-links">
+    <a (click)="toabout()" routerLinkActive="active-link">À propos</a>
+    <a (click)="tocontact()" routerLinkActive="active-link">Contact</a>
+    <a *ngIf="isRH()" (click)="torhoffer()" routerLinkActive="active-link">
+      <i class="fa fa-cogs"></i> Gérer Offres
+    </a>
+    <a *ngIf="ISADMIN()" (click)="toentreprise()" routerLinkActive="active-link">
+      <i class="fa fa-cogs"></i> Gérer Entreprises
+    </a>
+    <a  *ngIf="ISCONNECTED()" (click)="toprofile()" routerLinkActive="active-link">
+      <i class="fa fa-cogs"></i> voir profile </a>
+    <a *ngIf="isCANDIDAT()" (click)="toespace()" routerLinkActive="active-link">
+      <i class="fa fa-cogs"></i> espace candidat
+    </a>
+    <a *ngIf="isRH()" (click)="tometier()" routerLinkActive="active-link">
+      <i class="fa fa-cogs"></i> Gestion metiers
+    </a>
+    <a *ngIf="ISADMIN()" (click)="touser()" routerLinkActive="active-link">
+      <i class="fa fa-cogs"></i> Gestion Utilisateurs
+    </a>
+  </div>
+  <button *ngIf="isAuthenticated()" (click)="disconnect()" class="btn-nav">Deconnexion</button>
+  <button *ngIf="ISVISITEUR()" (click)="tologin()" class="btn-nav">Connexion</button>
+  <button *ngIf="ISVISITEUR()" (click)="toregister()" class="btn-nav btn-signup">S'inscrire</button>
+</nav>
+<!-- NAVBAR END -->
+
+<div class="main-layout">
+  <div class="content-main">
+
+    <!-- BARRE DE RECHERCHE -->
+    <div class="recherche-container">
+      <input
+        type="text"
+        placeholder="Rechercher une offre…"
+        [ngModel]="searchTerm$.value"
+        (ngModelChange)="onSearchChange($event)"
+        class="recherche-input"
+      />
+    </div>
+
+    <div class="offres-container">
+      <ng-container *ngIf="filteredOffres$ | async as offres; else loading">
+        <div *ngIf="error" class="error">{{ error }}</div>
+        <div *ngIf="offres.length === 0 && !isLoading">Aucune offre disponible.</div>
+        <div *ngIf="offres.length > 0">
+          <div *ngFor="let offre of offres" class="offre-card">
+            <div class="header">
+              <h2>{{ offre.libelle }}</h2>
+              <span *ngIf="offre.entreprise?.image">
+                <img [src]="getLogoUrl(offre.entreprise?.image)" alt="Logo entreprise" class="logo-img" >
+              </span>
+            </div>
+            <p>
+              <strong>Entreprise :</strong> {{ offre.entreprise?.nom || '—' }}
+              <span *ngIf="offre.entreprise?.adresse_siege">
+                — <em>{{ offre.entreprise?.adresse_siege }}</em>
+              </span>
+            </p>
+            <p><strong>Métier :</strong> {{ offre.metier_propose }}</p>
+            <p><strong>Type de contrat :</strong> {{ offre.type_contrat }}</p>
+            <p><strong>Date publication :</strong> {{ offre.date_publication | date:'shortDate' }}</p>
+            <button class="btn-detail" (click)="voirDetail(offre.id)">Voir détail</button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #loading>
+        <div class="loading">Chargement…</div>
+      </ng-template>
+    </div>
+  </div>
+</div>

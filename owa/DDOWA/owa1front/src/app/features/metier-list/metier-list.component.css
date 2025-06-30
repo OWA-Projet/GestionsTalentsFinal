@@ -1,0 +1,140 @@
+.metiers-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 18px 2vw 28px 2vw;
+  margin-top: 32px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 24px 0 rgba(0,0,0,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.02);
+}
+
+.metiers-container h2 {
+  color: #4976f7;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.btn-ajouter {
+  display: block;
+  margin: 0 auto 22px auto;
+  background: linear-gradient(90deg, #4976f7 60%, #9b5df6 100%);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-weight: 600;
+  font-size: 1.08rem;
+  padding: 8px 26px;
+  box-shadow: 0 1.5px 7px 0 rgba(130,109,244,0.11);
+  cursor: pointer;
+  transition: background 0.13s, color 0.13s;
+}
+.btn-ajouter:hover {
+  background: linear-gradient(90deg, #7c41e8 30%, #4976f7 90%);
+  color: #fffde3;
+}
+
+.metiers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.metier-card {
+  background: #fff;
+  box-shadow: 0 3px 14px rgba(120,120,200,0.08);
+  border-radius: 14px;
+  padding: 22px 22px 15px 22px;
+  border: 1.4px solid #eaeaff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 11px;
+  transition: box-shadow 0.15s, border 0.13s;
+  position: relative;
+}
+.metier-card:hover {
+  border: 1.6px solid #9b5df6;
+  box-shadow: 0 6px 30px 0 rgba(130,109,244,0.13);
+}
+
+.metier-card strong {
+  font-size: 1.15rem;
+  color: #4976f7;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.metier-description {
+  color: #7b86aa;
+  margin-left: 10px;
+  font-size: 1.03rem;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.metier-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.metier-card button {
+  border: none;
+  border-radius: 7px;
+  padding: 7px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s;
+  box-shadow: 0 1px 3px 0 rgba(130,109,244,0.07);
+}
+
+/* Modifier = BLEU */
+.metier-card button:first-child {
+  background: #f0f2fc;
+  color: #495ab6;
+}
+.metier-card button:first-child:hover {
+  background: #e6eaff;
+  color: #1d3686;
+}
+
+/* Supprimer = ROUGE */
+.metier-card button:last-child {
+  background: #fae6e6;
+  color: #db2e2e;
+}
+.metier-card button:last-child:hover {
+  background: #ffd5d5;
+  color: #a30000;
+}
+
+.error {
+  color: #db2e2e;
+  text-align: center;
+  background: #fff2f2;
+  border-radius: 7px;
+  padding: 8px 0;
+  margin-bottom: 18px;
+  font-weight: 500;
+  font-size: 1.06rem;
+}
+
+@media (max-width: 650px) {
+  .metier-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 8px 10px 8px;
+    gap: 7px;
+  }
+  .btn-ajouter {
+    width: 100%;
+  }
+  .metiers-container {
+    padding: 10px 2vw 18px 2vw;
+  }
+  .metier-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

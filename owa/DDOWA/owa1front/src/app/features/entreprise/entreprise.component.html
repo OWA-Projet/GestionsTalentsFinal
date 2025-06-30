@@ -1,0 +1,21 @@
+<div class="entreprises-container">
+    <h2>Gestion des entreprises</h2>
+    <button class="btn-ajouter" (click)="ajouterEntreprise()">Ajouter une entreprise</button>
+    <div *ngIf="error" class="error">{{ error }}</div>
+    <ng-container *ngIf="entreprises$ | async as entreprises; else loading">
+      <div class="entreprises-list" *ngIf="entreprises.length > 0; else aucune">
+        <div *ngFor="let ent of entreprises" class="entreprise-card">
+          <div>
+            <strong>{{ ent.nom }}</strong> <span>{{ ent.adresse_siege }}</span>
+          </div>
+          <div>
+            <button (click)="modifierEntreprise(ent.id)">Modifier</button>
+            <button (click)="supprimerEntreprise(ent.id)">Supprimer</button>
+          </div>
+        </div>
+      </div>
+      <ng-template #aucune><div>Aucune entreprise.</div></ng-template>
+    </ng-container>
+    <ng-template #loading><div>Chargement…</div></ng-template>
+  </div>
+  

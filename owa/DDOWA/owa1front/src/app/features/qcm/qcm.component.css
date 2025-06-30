@@ -1,0 +1,113 @@
+.qcm-loading {
+    font-size: 1.4rem;
+    color: #4F8AFF;
+    padding: 32px 0;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  .qcm-question {
+    background: #f5f7fb;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px #0002;
+    padding: 24px 20px;
+    margin: 32px auto 24px auto;
+    max-width: 680px;
+    transition: box-shadow 0.2s;
+  }
+  
+  .qcm-q {
+    font-size: 1.16rem;
+    font-weight: 600;
+    color: #234;
+    margin-bottom: 16px;
+    letter-spacing: 0.1px;
+  }
+  
+  .qcm-choice {
+    display: block;
+    margin-bottom: 11px;
+    font-size: 1.08rem;
+    font-weight: 500;
+    color: #25446e;
+    cursor: pointer;
+    padding: 8px 14px 8px 0;
+    border-radius: 7px;
+    transition: background 0.15s;
+  }
+  
+  .qcm-choice input[type="radio"] {
+    margin-right: 10px;
+    accent-color: #4F8AFF;
+  }
+  
+  .qcm-choice:hover, .qcm-choice input[type="radio"]:checked + span {
+    background: #e6f0ff;
+  }
+  
+  .qcm-feedback {
+    margin-top: 8px;
+    font-size: 1rem;
+  }
+  
+  .good {
+    color: #15b26a;
+    font-weight: 700;
+  }
+  
+  .bad {
+    color: #f13951;
+    font-weight: 700;
+  }
+  
+  .qcm-submit-btn {
+    background: linear-gradient(90deg, #4F8AFF 40%, #3958d6 100%);
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    font-size: 1.13rem;
+    padding: 12px 34px;
+    font-weight: 600;
+    margin: 32px 0 0 0;
+    cursor: pointer;
+    box-shadow: 0 3px 12px #4f8aff22;
+    transition: background 0.16s, box-shadow 0.18s, transform 0.09s;
+  }
+  
+  .qcm-submit-btn:disabled {
+    background: #a1b8e2;
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
+  
+  .qcm-score {
+    text-align: center;
+    font-size: 1.6rem;
+    margin: 32px 0 12px 0;
+    font-weight: 800;
+    color: #4F8AFF;
+    letter-spacing: 1.3px;
+  }
+  
+  .error {
+    color: #f13951;
+    text-align: center;
+    padding: 20px 0;
+    font-weight: 600;
+  }
+  
+  @media (max-width: 600px) {
+    .qcm-question {
+      padding: 13px 8px;
+      max-width: 98vw;
+      font-size: 1.01rem;
+    }
+    .qcm-submit-btn {
+      width: 100%;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 1.06rem;
+    }
+  }
+  
